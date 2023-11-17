@@ -1,0 +1,37 @@
+node_modules
+dist
+.env
+env
+neotmp
+credentials-129aeb5c.env
+tlib
+loadable-stats.json
+.ipynb_checkpoints/
+.ipynb_checkpoints
+__pycache__
+pyapi/aws
+tmppyapi
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Distribution directories
+dist/
+
+# temporary files
+neotmp/
+volumes/
+__pycache__/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Environment
+#.env
