@@ -11,7 +11,7 @@ export class CLibrary /* extends C_SINGLE_Props */ {
 
     axios: any = {};
 
-    createHash: (input: string) => string = () => '';
+    createHash: (input: string) => string;
 }
 
 /**

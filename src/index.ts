@@ -2,6 +2,7 @@ import { ILibrary } from './Library';
 import { createClient } from './Client';
 import { createEnvironment } from './Environment';
 import { createCacheableQuery } from './CacheableQuery';
+import { createAuthProvider } from './AuthProvider';
 
 export { CLibrary } from './Library';
 export {
@@ -21,14 +22,22 @@ export type { IClientProps } from './Client';
 
 export default (props: ILibrary) => {
     const { Environment, useEnvironment } = createEnvironment(props);
-    const { CacheableQuery, useCacheableQuery } = createCacheableQuery(
+    const { AuthProvider, useAuth } = createCacheableQuery(
+        props,
+        useEnvironment
+    );
+
+    const { CacheableQuery, useCacheableQuery } = createAuthProvider(
         props,
         useEnvironment
     );
 
     return {
-        Client: createClient(props, Environment, CacheableQuery),
+        AuthProvider,
+        Client: createClient(props, AuthProvider, Environment, CacheableQuery),
         Environment,
+        useAuth,
+        useCacheableQuery,
         useEnvironment
     };
 };

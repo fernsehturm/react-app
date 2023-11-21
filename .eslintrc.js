@@ -52,7 +52,9 @@ module.exports = {
         /**
          * disable "JSX not allowed in files with extension '.tsx'    react/jsx-filename-extension"
          */
-        "react/jsx-filename-extension": "off"
+        "react/jsx-filename-extension": "off",
+
+        "@stylistic/no-extra-parens": "off"
 
         
     }

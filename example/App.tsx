@@ -21,6 +21,7 @@ const WebApp = <Client
         apiExample: typeof window ? window?.__API_EXAMPLE__ : undefined
     }}
     nodeEnv={typeof window ? window?.__NODE_ENV__ : undefined}
+    ssrCache={typeof window ? window?.__SSR_CACHE__ : undefined}
 >App</Client>
 
 const rootElement = document.getElementById('root');

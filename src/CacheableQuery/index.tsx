@@ -1,6 +1,4 @@
 import type { ILibrary } from '../Library';
-import { filterEnvironmentProps } from '../Environment';
-import type { IEnvironmentProps } from '../Environment';
 import type { ICacheableQuery } from './cacheableQuery';
 import type { ICacheableQueryHook } from './cachableQueryHook';
 
@@ -14,17 +12,18 @@ import { filterCacheableQuery } from './cacheableQuery';
  * see: https://stackoverflow.com/questions/52984808/is-there-a-way-to-get-all-required-properties-of-a-typescript-object
  */
 export class CCacheableQueryProps /* extends C_SINGLE_Props */ {
-    children?:
+    cqChildren?:
         | React.ReactElement<any>
         | Array<React.ReactElement<any>>
-        | string
-        | null = null;
+        | string = '';
 
     onQuery: any;
 
+    /** are we in SSR mode at the server? */
     isSsr: boolean = false;
 
-    cache: any;
+    /** the content of the cache when rendering at the server */
+    ssrCache: any;
 }
 
 /**
@@ -107,80 +106,108 @@ export const createCacheableQuery: ICreateCacheableQuery = (
     useEnvironment
 ) => {
     const CacheableQueryContext = React.createContext(null);
-    const { dataUrl } = useEnvironment();
-
-    function cachableQueryPromise<T>(args: ICacheableQuery<T>) {
-        return axios({
-            url: `${dataUrl}${args.endpoint}`,
-            method: args.method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: args.querydata
-        });
-    }
 
     function CacheableQuery(props: ICacheableQueryProps): JSX.Element {
-        const parsedCache = (function(){
+        const { dataUrl } = useEnvironment();
+
+        function cachableQueryPromise<T>(args: ICacheableQuery<T>) {
+            return axios({
+                url: `${dataUrl}${args.endpoint}`,
+                method: args.method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: args.querydata
+            });
+        }
+
+        // console.log('isDevelopment: ', isDevelopment);
+        const parsedCache = (function () {
             try {
+                /* if (!props.isSsr) {
+                    // console.log(window.__CACHE__)
+                    return window.__CACHE__;
+                } */
 
-                if (!props.isSsr) {
-                    //console.log(window.__CACHE__)
-                    return window.__CACHE__
-                }
-
-                return props?.cache !== undefined ? JSON.parse(props.cache) : undefined;
+                return props?.ssrCache !== undefined
+                    ? JSON.parse(props.ssrCache)
+                    : undefined;
             } catch (error) {
                 return undefined;
             }
         })();
 
-        function cachableQueryHook<T> (args: ICacheableQueryHook<T>) {
-
+        function cachableQueryHook<T>(args: ICacheableQueryHook<T>) {
             const hash = createHash(JSON.stringify(filterCacheableQuery(args)));
-            
+
             /**
              * in capture mode, we don't do anything
              */
             if (props.isSsr && props.onQuery !== undefined) {
-                
-                props.onQuery(new Promise((resolve, reject) => {
-                    cachableQueryPromise(filterCacheableQuery(args)).then(response => resolve({hash, data: response?.data})).catch(reject)
-                }))
+                props.onQuery(
+                    new Promise((resolve, reject) => {
+                        cachableQueryPromise(filterCacheableQuery(args))
+                            .then((response) =>
+                                resolve({ hash, data: response?.data })
+                            )
+                            .catch(reject);
+                    })
+                );
 
-                return [{ data: undefined, loading: false, error: "SSR" }]
+                return [{ data: undefined, loading: false, error: 'SSR' }];
             }
-            
-            const item = parsedCache?.find(item => item?.hash.localeCompare(hash) == 0)
 
-            const [result, setResult] = React.useState({ data: item?.data, loading: undefined, error: undefined });
+            const item = parsedCache?.find(
+                (i) => i?.hash.localeCompare(hash) === 0
+            );
+
+            const [result, setResult] = React.useState({
+                data: item?.data,
+                loading: undefined,
+                error: undefined
+            });
             const [cnt, setCnt] = React.useState(0);
-          
-            React.useEffect(() => {
-              const fetchData = async () => {
-                if ((manual && cnt == 0) || result.loading){
-                    return;
-                }
-                setResult({ data: result.data, loading: true, error: false  })
-                
-                cachableQueryPromise(filterCacheableQuery(args)).then((response) => {
-                    if (onLoad !== undefined) {
-                        onLoad(response);
-                    }
-                    setResult({ data: response?.data, loading: false, error: false  })
-                
-                }).catch(err => {
-                    console.log(err)
-                    setResult({ data: result.data, loading: false, error: err  })
-                });
-    
-              };
-              fetchData();
-          
-              
-            }, [cnt].concat(reloadOn));
-          
-            return [result, () => setCnt(cnt+1), cnt];
+
+            React.useEffect(
+                () => {
+                    const fetchData = async () => {
+                        if ((args.manual && cnt === 0) || result.loading) {
+                            return;
+                        }
+                        setResult({
+                            data: result.data,
+                            loading: true,
+                            error: false
+                        });
+
+                        cachableQueryPromise(filterCacheableQuery(args))
+                            .then((response) => {
+                                if (args.onLoad !== undefined) {
+                                    args?.onLoad?.(response);
+                                }
+                                setResult({
+                                    data: response?.data,
+                                    loading: false,
+                                    error: false
+                                });
+                            })
+                            .catch((err) => {
+                                console.error(err);
+                                setResult({
+                                    data: result.data,
+                                    loading: false,
+                                    error: err
+                                });
+                            });
+                    };
+                    fetchData();
+                },
+                [cnt].concat(
+                    args?.reloadOn !== undefined ? args.reloadOn : [] ?? []
+                )
+            );
+
+            return [result, () => setCnt(cnt + 1), cnt];
         }
 
         const value = {
@@ -190,7 +217,7 @@ export const createCacheableQuery: ICreateCacheableQuery = (
 
         return (
             <CacheableQueryContext.Provider value={value}>
-                {props.children}
+                {props.cqChildren}
             </CacheableQueryContext.Provider>
         );
     }

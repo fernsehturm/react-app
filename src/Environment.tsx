@@ -10,7 +10,7 @@ declare let process: any;
  * see: https://stackoverflow.com/questions/52984808/is-there-a-way-to-get-all-required-properties-of-a-typescript-object
  */
 export class CEnvironmentProps /* extends C_SINGLE_Props */ {
-    children?:
+    envChildren?:
         | React.ReactElement<any>
         | Array<React.ReactElement<any>>
         | string = '';
@@ -119,18 +119,15 @@ export const createEnvironment: ICreateEnvironment = ({ React }) => {
                       )
                     : {};
 
-            // TODO remove comment here
-            console.log(objApis);
-
             try {
                 // we try to get the data from the window object
                 const isDevelopment =
                     props.nodeEnv?.localeCompare('development') === 0;
 
-                // typeof window && window?.__NODE_ENV__?.localeCompare('development') === 0;
+                const isBrowser = typeof window;
+                // && window?.__NODE_ENV__?.localeCompare('development') === 0;
 
-                // console.log('isDevelopment: ', isDevelopment);
-
+                // console.log(isBrowser)
                 // from here on, we're sure in the browser
                 return {
                     /** during development, we use a fixed subdomain */
@@ -159,7 +156,7 @@ export const createEnvironment: ICreateEnvironment = ({ React }) => {
                     })(),
                     isDevelopment,
 
-                    isBrowser: true,
+                    isBrowser,
 
                     // this is the address of the API, also look at AuthProvider!
                     dataUrl: isDevelopment ? `http://${props.domain}` : '',
@@ -187,7 +184,7 @@ export const createEnvironment: ICreateEnvironment = ({ React }) => {
 
         return (
             <EnvironmentContext.Provider value={value}>
-                {props.children}
+                {props.envChildren}
             </EnvironmentContext.Provider>
         );
     }

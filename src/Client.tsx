@@ -1,8 +1,16 @@
 import type { ILibrary } from './Library';
 import { filterEnvironmentProps } from './Environment';
-import type { IEnvironmentProps } from './Environment';
+import { filterCacheableQueryProps } from './CacheableQuery';
+import {
+    filterAuthProviderProps,
+    type IAuthProviderProps
+} from './AuthProvider';
 
-import type { ICacheableQueryProps } from './CacheableQuery';
+import type { CEnvironmentProps, IEnvironmentProps } from './Environment';
+import type {
+    CCacheableQueryProps,
+    ICacheableQueryProps
+} from './CacheableQuery';
 
 /**
  * The properties of the Subdomain-Function
@@ -22,7 +30,9 @@ export class CClientProps /* extends C_SINGLE_Props */ {
  * When using mutliple parent classes, extend here - but then, we need to apply these in the other steps manually, too
  */
 export interface IClientProps
-    extends CClientProps /* , C_MULTIPLE1_Props,  C_MULTIPLE2_Props, */ {}
+    extends CClientProps,
+        CEnvironmentProps,
+        CCacheableQueryProps {}
 
 /**
  * The type of an array of the properties
@@ -89,20 +99,26 @@ export const filterNonClientProps = (props: any) =>
 
 type ICreateClient = (
     props: ILibrary,
+    AuthProvider: React.FunctionComponent<IAuthProviderProps>,
     Environment: React.FunctionComponent<IEnvironmentProps>,
     CacheableQuery: React.FunctionComponent<ICacheableQueryProps>
 ) => any;
 
 export const createClient: ICreateClient = (
     { React },
+    AuthProvider,
     Environment,
     CacheableQuery
 ) => {
     function Client(props: IClientProps): JSX.Element {
-        console.log(props);
+        // console.log(props);
         return (
             <Environment {...filterEnvironmentProps(props)}>
-                <CacheableQuery>{props.children}</CacheableQuery>
+                <CacheableQuery {...filterCacheableQueryProps(props)}>
+                    <AuthProvider {...filterAuthProviderProps(props)}>
+                        {props.children}
+                    </AuthProvider>
+                </CacheableQuery>
             </Environment>
         );
     }
