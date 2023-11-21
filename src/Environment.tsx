@@ -10,7 +10,7 @@ declare let process: any;
  * see: https://stackoverflow.com/questions/52984808/is-there-a-way-to-get-all-required-properties-of-a-typescript-object
  */
 export class CEnvironmentProps /* extends C_SINGLE_Props */ {
-    envChildren?:
+    children?:
         | React.ReactElement<any>
         | Array<React.ReactElement<any>>
         | string = '';
@@ -184,7 +184,7 @@ export const createEnvironment: ICreateEnvironment = ({ React }) => {
 
         return (
             <EnvironmentContext.Provider value={value}>
-                {props.envChildren}
+                {props.children}
             </EnvironmentContext.Provider>
         );
     }

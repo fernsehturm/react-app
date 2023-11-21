@@ -22,12 +22,12 @@ export type { IClientProps } from './Client';
 
 export default (props: ILibrary) => {
     const { Environment, useEnvironment } = createEnvironment(props);
-    const { AuthProvider, useAuth } = createCacheableQuery(
+    const { AuthProvider, useAuth } = createAuthProvider(
         props,
         useEnvironment
     );
 
-    const { CacheableQuery, useCacheableQuery } = createAuthProvider(
+    const { CacheableQuery, useCacheableQuery } = createCacheableQuery(
         props,
         useEnvironment
     );

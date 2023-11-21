@@ -12,7 +12,7 @@ import { filterCacheableQuery } from './cacheableQuery';
  * see: https://stackoverflow.com/questions/52984808/is-there-a-way-to-get-all-required-properties-of-a-typescript-object
  */
 export class CCacheableQueryProps /* extends C_SINGLE_Props */ {
-    cqChildren?:
+    children?:
         | React.ReactElement<any>
         | Array<React.ReactElement<any>>
         | string = '';
@@ -217,7 +217,7 @@ export const createCacheableQuery: ICreateCacheableQuery = (
 
         return (
             <CacheableQueryContext.Provider value={value}>
-                {props.cqChildren}
+                {props.children}
             </CacheableQueryContext.Provider>
         );
     }

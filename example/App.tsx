@@ -9,20 +9,29 @@ declare const window: any;
 import * as React from 'react';
 
 import External from './External';
-const { Client, hydrateRoot, createRoot } = External;
+const { 
+    BrowserRouter,
+    Client,
+    hydrateRoot,
+    createRoot
+} = External;
 
 // increase the stack trace
 Error.stackTraceLimit = 25;
 
-const WebApp = <Client
-    devSubdomain="a"
-    domain={typeof window ? window?.__DOMAIN__ : undefined}
-    apis={{
-        apiExample: typeof window ? window?.__API_EXAMPLE__ : undefined
-    }}
-    nodeEnv={typeof window ? window?.__NODE_ENV__ : undefined}
-    ssrCache={typeof window ? window?.__SSR_CACHE__ : undefined}
->App</Client>
+const WebApp = <BrowserRouter>
+    <Client
+        devSubdomain="a"
+        domain={typeof window ? window?.__DOMAIN__ : undefined}
+        apis={{
+            apiExample: typeof window ? window?.__API_EXAMPLE__ : undefined
+        }}
+        nodeEnv={typeof window ? window?.__NODE_ENV__ : undefined}
+        ssrCache={typeof window ? window?.__SSR_CACHE__ : undefined}
+    >
+        App
+    </Client>
+</BrowserRouter>;
 
 const rootElement = document.getElementById('root');
 if (rootElement?.hasChildNodes()) {

@@ -22,7 +22,7 @@ export class CClientProps /* extends C_SINGLE_Props */ {
     children?:
         | React.ReactElement<any>
         | Array<React.ReactElement<any>>
-        | string = '';
+        | string;
 }
 
 /**
@@ -111,7 +111,7 @@ export const createClient: ICreateClient = (
     CacheableQuery
 ) => {
     function Client(props: IClientProps): JSX.Element {
-        // console.log(props);
+        console.log(props);
         return (
             <Environment {...filterEnvironmentProps(props)}>
                 <CacheableQuery {...filterCacheableQueryProps(props)}>

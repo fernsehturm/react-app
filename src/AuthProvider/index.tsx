@@ -13,7 +13,7 @@ import type { IAuthenticatedQueryHook } from './authenticatedQueryHook';
  * see: https://stackoverflow.com/questions/52984808/is-there-a-way-to-get-all-required-properties-of-a-typescript-object
  */
 export class CAuthProviderProps /* extends C_SINGLE_Props */ {
-    auChildren?:
+    children?:
         | React.ReactElement<any>
         | Array<React.ReactElement<any>>
         | string = '';
@@ -333,7 +333,7 @@ export const createAuthProvider: ICreateAuthProvider = (
 
         return (
             <AuthProviderContext.Provider value={value}>
-                {props.auChildren}
+                {props.children}
             </AuthProviderContext.Provider>
         );
     }

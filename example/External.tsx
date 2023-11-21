@@ -29,6 +29,7 @@ export default {
         axios,
         createHash: murmurHash3.x86.hash128,
     }),
+    BrowserRouter: ReactRouterDom.BrowserRouter,
     hydrateRoot,
     createRoot,
     CEnvironmentProps,
