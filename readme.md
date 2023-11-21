@@ -4,6 +4,7 @@ Scaffolder of a React-App that
 
 - loads environment variables during the build-process and passes them to the app running in the browser
 - supports SSR (cacheableQuery)
+- authenticated queries
 
 ## Installation
 
@@ -23,6 +24,6 @@ Babel for transpiling, `tsc` for types: https://www.typescriptlang.org/docs/hand
 Link library:
 
 1. in library: run `npm link`
-2. in project run `npm link @calliopa/core-webapp`
+2. in project run `npm link @calliopa/react-app`
 
 see: https://sparkbox.com/foundry/test_project_changes_in_real_time_by_linking_your_component_library_and_project_with_npm_link
