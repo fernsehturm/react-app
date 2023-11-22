@@ -4,7 +4,7 @@ import { createEnvironment } from './Environment';
 import { createCacheableQuery } from './CacheableQuery';
 import { createAuthProvider } from './AuthProvider';
 import { createProtectedRoute } from './ProtectedRoute';
-
+import { createSeo } from './Seo';
 
 export { CLibrary } from './Library';
 export {
@@ -39,6 +39,7 @@ export default (props: ILibrary) => {
         Client: createClient(props, AuthProvider, Environment, CacheableQuery),
         Environment,
         ProtectedRoute: createProtectedRoute(props, useAuth),
+        Seo: createSeo(props),
         useAuth,
         useCacheableQuery,
         useEnvironment
