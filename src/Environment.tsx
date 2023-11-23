@@ -112,11 +112,12 @@ export const createEnvironment: ICreateEnvironment = ({ React }) => {
 
     function Environment(props: IEnvironmentProps): JSX.Element {
         const value = (function () {
+            
             const objApis =
                 props.apis !== undefined
-                    ? Object.keys(props.apis).map(
-                          (key: string) => `http://${props.apis?.[key]}`
-                      )
+                    ? Object.keys(props.apis).reduce(
+                          (result, key: string) => ({ ...result, [key]: `http://${props.apis?.[key]}`})
+                      , {})
                     : {};
 
             try {
@@ -181,6 +182,8 @@ export const createEnvironment: ICreateEnvironment = ({ React }) => {
                 };
             }
         })();
+
+        console.log(value)
 
         return (
             <EnvironmentContext.Provider value={value}>

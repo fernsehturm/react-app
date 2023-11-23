@@ -18,13 +18,14 @@ export class CAuthProviderProps /* extends C_SINGLE_Props */ {
         | Array<React.ReactElement<any>>
         | string = '';
 
-    authKey: string;
+    authKey: string = '';
 
-    loginRoute: string;
+    loginRoute: string = '';
 
-    loginEndpoint: string;
+    loginEndpoint: string = '';
 
-    signupEndpoint: string;
+    signupEndpoint: string = '';
+
 }
 
 /**
@@ -90,14 +91,13 @@ export const filterAuthProviderProps = (
     return data;
 };
 
+
 export const filterNonAuthProviderProps = (props: any) =>
     Object.keys(props).reduce((r: any, k: string) => {
-        return {
-            ...r,
-            [k]: !propsArray.includes(k as keyof CAuthProviderProps)
-                ? props[k]
-                : undefined
-        };
+        return Object.assign(r, 
+            !propsArray.includes(k as keyof CAuthProviderProps) ? { [k]: props[k] } : {}
+        )
+
     }, {});
 
 type ICreateAuthProvider = (props: ILibrary, useEnvironment) => any;
@@ -110,6 +110,7 @@ export const createAuthProvider: ICreateAuthProvider = (
     { axios, React, ReactRouterDom },
     useEnvironment
 ) => {
+    
     const useLocalStorage = (storageKey, fallbackState) => {
         // checking the type of localStorage doesn't work
         // therefore, we handle the exception
@@ -156,6 +157,7 @@ export const createAuthProvider: ICreateAuthProvider = (
         const location = ReactRouterDom.useLocation();
         const [token, setToken] = useLocalStorage(props.authKey, undefined);
 
+        
         React.useEffect(() => {
             if (token !== undefined) {
                 localStorage.setItem(props.authKey, token);
@@ -171,7 +173,7 @@ export const createAuthProvider: ICreateAuthProvider = (
          * @param endpoint
          * @returns
          */
-        const handleEvent = (endpoint: string) => async (user: any) => {
+        const handleEvent = (endpoint: string) => async (user: any, onEnd?: (success: boolean) => boolean) => {
             axios
                 .post(`${environment.dataUrl}${endpoint}`, {
                     headers: {
@@ -182,13 +184,24 @@ export const createAuthProvider: ICreateAuthProvider = (
                 .then(async (response) => {
                     if (response?.data?.token !== undefined) {
                         setToken(response.data.token);
-                        const origin = location.state?.from?.pathname || '/';
-                        navigate(origin);
+
+                        if(onEnd?.(true) ?? true) {
+                            const origin = location.state?.from?.pathname || '/';
+                            navigate(origin);
+                        }
+                        
+                    } else {
+                        onEnd?.(true);
                     }
                 })
                 .catch((err) => {
                     if (err?.response?.status === 498) {
                         setToken(null);
+                        if (onEnd?.(false) ?? true) {
+                            navigate(props.loginRoute);
+                        }
+                        
+                    } else if (onEnd?.(false) ?? true) {
                         navigate(props.loginRoute);
                     }
                 });
@@ -338,6 +351,10 @@ export const createAuthProvider: ICreateAuthProvider = (
         );
     }
 
+    
+    /**
+     * redirect to Login-path ?
+     */
     const useAuth: any = () => {
         return React.useContext(AuthProviderContext);
     };

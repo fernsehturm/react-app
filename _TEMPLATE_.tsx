@@ -79,14 +79,13 @@ export const filter_TEMPLATE_Props = (
 
 export const filterNon_TEMPLATE_Props = (props: any) =>
     Object.keys(props).reduce((r: any, k: string) => {
-        return {
-            ...r,
-            [k]: !propsArray.includes(k as keyof C_TEMPLATE_Props)
-                ? props[k]
-                : undefined
-        };
+        return Object.assign(r, 
+            !propsArray.includes(k as keyof C_TEMPLATE_Props) ? { [k]: props[k] } : {}
+        )
+
     }, {});
 
+    
 type ICreate_TEMPLATE_ = (props: ILibrary) => any;
 
 

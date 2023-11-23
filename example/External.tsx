@@ -8,7 +8,7 @@
 import * as React from 'react';
 import * as ReactHelmet from 'react-helmet';
 import * as ReactRouterDom from 'react-router-dom';
-import * as axios from 'axios';
+import axios from 'axios';
 import murmurHash3 from 'murmurhash3js';
 
 import { hydrateRoot, createRoot } from 'react-dom/client';

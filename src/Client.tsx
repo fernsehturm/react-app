@@ -111,7 +111,6 @@ export const createClient: ICreateClient = (
     CacheableQuery
 ) => {
     function Client(props: IClientProps): JSX.Element {
-        console.log(props);
         return (
             <Environment {...filterEnvironmentProps(props)}>
                 <CacheableQuery {...filterCacheableQueryProps(props)}>
