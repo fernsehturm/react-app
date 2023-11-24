@@ -229,7 +229,7 @@ export const createAuthProvider: ICreateAuthProvider = (
                         authorization: token,
                         subdomain: environment.subdomain
                     },
-                    data: args.querydata
+                    data: args.queryData
                 })
                     .then(resolve)
                     .catch((err) => {
@@ -248,17 +248,17 @@ export const createAuthProvider: ICreateAuthProvider = (
             args: IAuthenticatedQuery<T>,
             file: any
         ) {
-            // const  = (method: string, endpoint: string, , querydata = {}, usePyapi: boolean = false) =>
+            // const  = (method: string, endpoint: string, , queryData = {}, usePyapi: boolean = false) =>
 
             return new Promise((resolve, reject) => {
                 const formData = new FormData();
 
                 formData.append(FORMDATA_FILE, file?.file ?? file);
 
-                if (args.querydata !== undefined) {
+                if (args.queryData !== undefined) {
                     formData.append(
                         METADATA_KEY,
-                        JSON.stringify(args.querydata)
+                        JSON.stringify(args.queryData)
                     );
                 }
 
@@ -288,7 +288,7 @@ export const createAuthProvider: ICreateAuthProvider = (
         }
 
         function authenticatedQueryHook<T>(args: IAuthenticatedQueryHook<T>) {
-            // const authenticatedQueryHook = (method: string, endpoint: string, querydata = {}, manual = false, onLoad = undefined, usePyapi: boolean = false, refetchOn = []) => {
+            // const authenticatedQueryHook = (method: string, endpoint: string, queryData = {}, manual = false, onLoad = undefined, usePyapi: boolean = false, refetchOn = []) => {
             const [result, setResult] = React.useState({
                 data: undefined,
                 loading: undefined,

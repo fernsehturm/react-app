@@ -11,7 +11,7 @@ export class CAuthenticatedQuery<T> /* extends C_SINGLE_Props */ {
 
     endpoint: string;
 
-    querydata: T;
+    queryData: T;
 
     apiIdentifier: string;
 }
