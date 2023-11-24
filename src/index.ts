@@ -40,6 +40,7 @@ export default (props: ILibrary) => {
         Environment,
         ProtectedRoute: createProtectedRoute(props, useAuth),
         Seo: createSeo(props),
+        Protected: createProtectedRoute(props, useAuth),
         useAuth,
         useCacheableQuery,
         useEnvironment

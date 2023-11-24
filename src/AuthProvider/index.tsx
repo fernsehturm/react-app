@@ -26,6 +26,10 @@ export class CAuthProviderProps /* extends C_SINGLE_Props */ {
 
     signupEndpoint: string = '';
 
+    /**
+     * where to send users who singed up / signed in
+     */
+    signinDestination: string = '';
 }
 
 /**
@@ -186,7 +190,11 @@ export const createAuthProvider: ICreateAuthProvider = (
                         setToken(response.data.token);
 
                         if(onEnd?.(true) ?? true) {
-                            const origin = location.state?.from?.pathname || '/';
+                            const origin = (function () {
+                                if (location.state?.from?.pathname !== undefined) return location.state.from.pathname;
+                                if (props.signinDestination?.length > 0) return props.signinDestination;
+                                return '/';
+                            })();
                             navigate(origin);
                         }
                         
