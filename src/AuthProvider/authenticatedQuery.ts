@@ -7,13 +7,13 @@
  * see: https://stackoverflow.com/questions/52984808/is-there-a-way-to-get-all-required-properties-of-a-typescript-object
  */
 export class CAuthenticatedQuery<T> /* extends C_SINGLE_Props */ {
-    method: string;
+    method: string | null = null;
 
-    endpoint: string;
+    endpoint: string | null = null;
 
-    queryData: T;
+    queryData: T | null = null;
 
-    apiIdentifier: string;
+    apiIdentifier: string | null = null;
 }
 
 /**

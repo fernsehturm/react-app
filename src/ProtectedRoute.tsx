@@ -64,16 +64,16 @@ type ICreateProtectedRoute = (props: ILibrary, useAuth) => IProtectedRoute;
 export const createProtectedRoute: ICreateProtectedRoute = ({ React, ReactRouterDom }, useAuth) => {
 
     const ProtectedRoute: IProtectedRoute = (props)  => {
-
+        
         const { token } = useAuth();
         const location = ReactRouterDom.useLocation();
-
+        
         if (!token) {
             return <ReactRouterDom.Navigate to={props.loginRoute} replace state={{ from: location }} />;
         }
 
         return <>
-        { props.children }
+            { props.children }
         </>
     };
 

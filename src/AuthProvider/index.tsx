@@ -142,7 +142,7 @@ export const createAuthProvider: ICreateAuthProvider = (
         );
 
         React.useEffect(() => {
-            if (value !== undefined) {
+            if (value) {
                 localStorage.setItem(storageKey, JSON.stringify(value));
             } else {
                 localStorage.removeItem(storageKey);
@@ -163,7 +163,7 @@ export const createAuthProvider: ICreateAuthProvider = (
 
         
         React.useEffect(() => {
-            if (token !== undefined) {
+            if (token) {
                 localStorage.setItem(props.authKey, token);
             }
         }, [token]);
@@ -216,6 +216,7 @@ export const createAuthProvider: ICreateAuthProvider = (
         };
 
         function authenticatedQueryPromise<T>(args: IAuthenticatedQuery<T>) {
+            
             return new Promise((resolve, reject) => {
                 axios({
                     url: `${
