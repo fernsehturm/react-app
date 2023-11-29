@@ -12,6 +12,8 @@ import type {
     ICacheableQueryProps
 } from './CacheableQuery';
 
+import type { ISignalsProps } from './Signals';
+
 /**
  * The properties of the Subdomain-Function
  * Extend the interface here!
@@ -101,23 +103,27 @@ type ICreateClient = (
     props: ILibrary,
     AuthProvider: React.FunctionComponent<IAuthProviderProps>,
     Environment: React.FunctionComponent<IEnvironmentProps>,
-    CacheableQuery: React.FunctionComponent<ICacheableQueryProps>
+    CacheableQuery: React.FunctionComponent<ICacheableQueryProps>,
+    Signals: React.FunctionComponent<ISignalsProps>,
 ) => any;
 
 export const createClient: ICreateClient = (
     { React },
     AuthProvider,
     Environment,
-    CacheableQuery
+    CacheableQuery,
+    Signals
 ) => {
     function Client(props: IClientProps): JSX.Element {
         return (
             <Environment {...filterEnvironmentProps(props)}>
-                <CacheableQuery {...filterCacheableQueryProps(props)}>
-                    <AuthProvider {...filterAuthProviderProps(props)}>
-                        {props.children}
-                    </AuthProvider>
-                </CacheableQuery>
+                <Signals>
+                    <CacheableQuery {...filterCacheableQueryProps(props)}>
+                        <AuthProvider {...filterAuthProviderProps(props)}>
+                            {props.children}
+                        </AuthProvider>
+                    </CacheableQuery>
+                </Signals>
             </Environment>
         );
     }

@@ -5,6 +5,7 @@ import { createCacheableQuery } from './CacheableQuery';
 import { createAuthProvider } from './AuthProvider';
 import { createProtectedRoute } from './ProtectedRoute';
 import { createSeo } from './Seo';
+import { createSignals } from './Signals';
 
 export { CLibrary } from './Library';
 export {
@@ -34,16 +35,20 @@ export default (props: ILibrary) => {
         useEnvironment
     );
 
+    const { Signals, useSignals } = createSignals(props)
+
     return {
         AuthProvider,
-        Client: createClient(props, AuthProvider, Environment, CacheableQuery),
+        Client: createClient(props, AuthProvider, Environment, CacheableQuery, Signals),
         Environment,
         ProtectedRoute: createProtectedRoute(props, useAuth),
         Seo: createSeo(props),
         Protected: createProtectedRoute(props, useAuth),
         useAuth,
         useCacheableQuery,
-        useEnvironment
+        useEnvironment,
+        Signals,
+        useSignals
     };
 };
 
