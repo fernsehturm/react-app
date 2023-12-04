@@ -124,7 +124,7 @@ export const createCacheableQuery: ICreateCacheableQuery = (
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                data: args.querydata
+                data: args.queryData
             });
         }
 

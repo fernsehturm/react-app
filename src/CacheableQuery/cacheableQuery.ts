@@ -11,7 +11,7 @@ export class CCacheableQuery<T> /* extends C_SINGLE_Props */ {
 
     endpoint: string | null = null;
 
-    querydata: T | null = null;
+    queryData: T | null = null;
 
     apiIdentifier: string | null = null;
 }

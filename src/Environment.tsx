@@ -183,8 +183,6 @@ export const createEnvironment: ICreateEnvironment = ({ React }) => {
             }
         })();
 
-        console.log(value)
-
         return (
             <EnvironmentContext.Provider value={value}>
                 {props.children}

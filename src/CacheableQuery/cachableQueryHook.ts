@@ -14,6 +14,10 @@ export class CCacheableQueryHook<T> extends CCacheableQuery<T> {
     onLoad?: any = null;
 
     reloadOn?: Array<any> | null = null;
+
+    constructor() {
+        super()
+    }
 }
 
 /**
