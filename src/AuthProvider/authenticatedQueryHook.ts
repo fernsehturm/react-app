@@ -11,9 +11,9 @@ import { CAuthenticatedQuery } from './authenticatedQuery';
 export class CAuthenticatedQueryHook<T> extends CAuthenticatedQuery<T> {
     manual?: boolean = false;
 
-    onLoad?: any;
+    onLoad?: any | null = null;
 
-    reloadOn?: Array<any>;
+    reloadOn?: Array<any> | null = null;
 }
 
 /**

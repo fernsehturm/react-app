@@ -11,9 +11,9 @@ import { CCacheableQuery } from './cacheableQuery';
 export class CCacheableQueryHook<T> extends CCacheableQuery<T> {
     manual?: boolean = false;
 
-    onLoad?: any;
+    onLoad?: any = null;
 
-    reloadOn?: Array<any>;
+    reloadOn?: Array<any> | null = null;
 }
 
 /**

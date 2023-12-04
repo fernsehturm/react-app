@@ -340,7 +340,7 @@ export const createAuthProvider: ICreateAuthProvider = (
                 [cnt].concat(args?.reloadOn ? args?.reloadOn : [])
             );
 
-            return [result, () => setCnt(cnt + 1), cnt];
+            return [result, () => setCnt(cnt + 1), cnt, (data) => setResult({data: data, loading: false, error: false})];
         }
 
         const value = {

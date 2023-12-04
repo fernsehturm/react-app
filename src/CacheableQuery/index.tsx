@@ -108,11 +108,18 @@ export const createCacheableQuery: ICreateCacheableQuery = (
     const CacheableQueryContext = React.createContext(null);
 
     function CacheableQuery(props: ICacheableQueryProps): JSX.Element {
-        const { dataUrl } = useEnvironment();
+        const environment = useEnvironment();
+
+        
 
         function cachableQueryPromise<T>(args: ICacheableQuery<T>) {
+            
             return axios({
-                url: `${dataUrl}${args.endpoint}`,
+                url: `${
+                    args.apiIdentifier && environment[args.apiIdentifier]
+                        ? environment[args.apiIdentifier]
+                        : environment.dataUrl
+                }${args.endpoint}`,
                 method: args.method,
                 headers: {
                     'Content-Type': 'application/json'
@@ -212,7 +219,7 @@ export const createCacheableQuery: ICreateCacheableQuery = (
 
         const value = {
             cachableQuery: cachableQueryHook,
-            cachableQueryPromise
+            cachablePromise: cachableQueryPromise
         };
 
         return (
